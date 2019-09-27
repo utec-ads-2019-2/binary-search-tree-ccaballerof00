@@ -27,11 +27,12 @@ public:
         }
 
         Iterator<T>& operator=(const Iterator<T> &other) {          
-            // TODO
+            this->current = other.current;
+            return *this;
         }
 
         bool operator!=(Iterator<T> other) {
-            // TODO
+            return this->current != other.current;
         }
 
         Node<T>* buscar_padre(Node<T>* buscado)
@@ -56,46 +57,61 @@ public:
         }
 
         Iterator<T>& operator++() {
-
-            if(current->right==nullptr)
+            auto cola = root;
+            while(cola->right!=nullptr)
             {
-                auto padre = buscar_padre(current);
-                while(padre->data<current->data)
-                {
-                    padre = buscar_padre(padre);
-                }
-                current = padre;
+                cola = cola->right;
             }
-            else
-            {
-                auto aux = current->right;
-                while(true)
-                {
-                    if(aux->left==nullptr)
-                    {
-                        current = aux;
-                        break;
+            if(current != cola) {
+                if (current->right == nullptr) {
+                    auto padre = buscar_padre(current);
+                    while (padre->data < current->data) {
+                        padre = buscar_padre(padre);
                     }
-                    aux = aux->left;
+                    current = padre;
+                } else {
+                    auto aux = current->right;
+                    while (true) {
+                        if (aux->left == nullptr) {
+                            current = aux;
+                            break;
+                        }
+                        aux = aux->left;
+                    }
                 }
+                return *this;
             }
-            return *this;
+            *this = Iterator<T>(nullptr,root);
+            return  *this;
         }
 
         Iterator<T>& operator--() {
-            if(current->left!=nullptr)
-            {
-                auto aux = current->left;
-                while(true)
-                {
-                    if(aux->right==nullptr)
-                    {
-                        current = aux;
-                        break;
+            if (current != nullptr) {
+                    if (current->left != nullptr) {
+                        auto aux = current->left;
+                        while (true) {
+                            if (aux->right == nullptr) {
+                                current = aux;
+                                break;
+                            }
+                            aux = aux->right;
+                        }
+                    } else {
+                        auto padre = buscar_padre(current);
+                        while (padre->data >= current->data) {
+                            padre = buscar_padre(padre);
+                        }
+                        current = padre;
                     }
-                    aux = aux->right;
-                }
+                    return *this;
             }
+            auto cola = root;
+            while(cola->right!=nullptr)
+            {
+                cola = cola->right;
+            }
+            *this = Iterator<T>(cola,root);
+            return *this;
         }
 
         T operator*() {

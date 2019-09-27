@@ -5,13 +5,14 @@
 #include "node.h"
 #include "iterator.h"
 
+
 template <typename T> 
 class BSTree {
     Node<T> *root;
     int nodes;
 
     public:
-        BSTree() : root(nullptr),nodes(0) {};
+    BSTree() : root(nullptr),nodes(0) {};
 
         T raiz()
         {
@@ -196,26 +197,51 @@ class BSTree {
             return max(hallar_altura(temp->left),hallar_altura(temp->right))+1;
         }
 
-        void traversePreOrder() {
-            // TODO
-        }
+    void traversePreOrder() {
+        preorder(root);
+    }
 
-        void traverseInOrder() {
-            // TODO
-        }
+    void preorder(Node<T>* aux){
+        if (aux== nullptr) return;
+        cout << aux->data << " ";
+        preorder(aux->left);
+        preorder(aux->right);
+    }
 
-        void traversePostOrder() {
-            // TODO
-        }
+    void traverseInOrder() {
+        inorder(root);
+    }
+
+    void inorder(Node<T>* aux){
+        if (aux == nullptr) return;
+
+        inorder(aux->left);
+        cout << aux->data << " ";
+        inorder(aux->right);
+
+    }
+
+    void postorder(Node<T>* aux){
+        if (aux== nullptr) return;
+        postorder(aux->left);
+        postorder(aux->right);
+        cout << aux->data << " ";
+    }
+
+    void traversePostOrder() {
+        postorder(root);
+    }
+
 
         Iterator<T> begin() {
-            auto aux = root;
-            while(aux->left!=nullptr)
-            {
-                aux = aux->left;
+            if(root!=nullptr) {
+                auto aux = root;
+                while (aux->left != nullptr) {
+                    aux = aux->left;
+                }
+                auto it = Iterator<T>(aux, root);
+                return it;
             }
-            auto it = Iterator<T> (aux,root);
-            return it;
         }
 
         Iterator<T> end() { 
@@ -223,8 +249,21 @@ class BSTree {
             return it;
         }
 
-        ~BSTree() {
-            // TODO
+        void killSelf(Node<T>* chunte)
+        {
+            if(chunte->left!=nullptr)
+            {
+                killSelf(chunte->left);
+            }
+            if(chunte->right!=nullptr)
+            {
+                killSelf(chunte->right);
+            }
+            delete this;
+        }
+        ~BSTree()
+        {
+            killSelf(root);
         }
 };
 
