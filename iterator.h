@@ -63,6 +63,7 @@ public:
                 cola = cola->right;
             }
             if(current != cola) {
+                // Vas a iterar muchas veces para avanzar, esto es muy lento
                 if (current->right == nullptr) {
                     auto padre = buscar_padre(current);
                     while (padre->data < current->data) {
@@ -115,6 +116,7 @@ public:
         }
 
         T operator*() {
+            // Caso de null?
             return current->data;
         }
 };

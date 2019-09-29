@@ -1,10 +1,8 @@
 #ifndef BSTREE_H
 #define BSTREE_H
 
-#include <bits/exception.h>
 #include "node.h"
 #include "iterator.h"
-
 
 template <typename T> 
 class BSTree {
